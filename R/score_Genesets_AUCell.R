@@ -17,8 +17,9 @@
 #' @export
 #'
 score_Genesets_AUCell <- function(scrna, genesets, nbatches = 10, ncores = 1, output = c('metadata', 'assay', 'dataframe'), assay_name = 'AUCell'){
+  counts <- as(Seurat::GetAssayData(scrna, assay = 'RNA', layer = 'counts'), "dgCMatrix")
 
-  AUCell_scores <- AUCell_batch(Seurat::GetAssayData(scrna, assay = 'RNA', slot = 'counts'), genesets=genesets, num_batches=nbatches, num_cores=ncores)
+  AUCell_scores <- AUCell_batch(counts, genesets=genesets, num_batches=nbatches, num_cores=ncores)
   colnames(AUCell_scores) <- paste0(colnames(AUCell_scores), "_AUC")
 
   if(output == 'metadata'){
